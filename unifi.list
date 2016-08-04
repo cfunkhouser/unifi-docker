@@ -1,0 +1,4 @@
+# UniFi Controller v5 APT Repository.
+#
+# Copied from: https://help.ubnt.com/hc/en-us/articles/220066768-UniFi-Debian-Ubuntu-APT-howto
+deb http://www.ubnt.com/downloads/unifi/debian unifi5 ubiquiti

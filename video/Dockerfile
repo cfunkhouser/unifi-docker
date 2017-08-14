@@ -10,29 +10,32 @@ ENV DEBIAN_FRONTEND noninteractive
 # Copy the UniFi list file to sources.list.d so APT can find them.
 ADD ./unifi-video-sources.list \
     /etc/apt/sources.list.d/10unifi-video-sources.list
+ADD ./remove-ulimits.patch \
+    /usr/src/unifi-video_remove-ulimits.patch
 
-RUN wget -O - \
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 06E85760C0A52C50 && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv 97B46B8582C6571E && \
+    apt-get update -q -y --fix-missing && \
+    apt-get install wget patch -q -y --no-install-recommends && \
+    mkdir -p /usr/share/man/man1/ && \
+    wget -O - \
         http://www.ubnt.com/downloads/unifi-video/apt-3.x/unifi-video.gpg.key \
         | apt-key add - && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv 06E85760C0A52C50 && \
-    apt-get update -q -y --fix-missing && \
     apt-get install -t jessie-backports -q -y --no-install-recommends \
-        ca-certificates-java \
-        openjdk-8-jre-headless && \
-    apt-get install -t stable -q -y --no-install-recommends unifi-video
+        openjdk-8-jre-headless ca-certificates-java && \
+    apt-get install -q -y --no-install-recommends unifi-video && \
+    patch -N /usr/sbin/unifi-video /usr/src/unifi-video_remove-ulimits.patch
 
 # Information about these ports taken from:
 # https://help.ubnt.com/hc/en-us/articles/217875218-UniFi-Video-Ports-Used
 EXPOSE  \
-   6666/udp \
+   6666/tcp \
    7004/tcp \
    7080/tcp \
    7443/tcp \
    7445/tcp \
    7446/tcp \
    7447/tcp
-VOLUME \
-    /var/lib/unifi-video \
-    /var/log/unifi-video
+VOLUME /var/lib/unifi-video
 WORKDIR /usr/lib/unifi
-CMD ["/usr/sbin/unifi-video", "--nodetach", "start"]
+CMD ["/usr/sbin/unifi-video", "--nodetach", "--debug", "start"]

@@ -1,0 +1,18 @@
+--- unifi-video	2017-06-29 22:18:14.128120766 -0400
++++ unifi-video	2017-06-29 22:20:20.577793214 -0400
+@@ -284,7 +284,6 @@
+ 	start)
+ 	require_root
+     update_limits
+-        ulimit -H -c 200
+         echo 0x10 > /proc/self/coredump_filter
+ 		if is_service_running "${PIDFILE}" >/dev/null; then
+ 			log_verbose "${NAME} is already running..."
+@@ -303,7 +302,6 @@
+ 		;;
+ 	stop)
+ 		require_root
+-        ulimit -H -c 200
+         echo 0x10 > /proc/self/coredump_filter
+ 		rc=0
+ 		pid=$(is_service_running ${PIDFILE}) || rc=$?

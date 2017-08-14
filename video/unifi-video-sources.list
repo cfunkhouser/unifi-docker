@@ -1,0 +1,6 @@
+# Current stable UniFi Video Repository.
+# Taken from: https://community.ubnt.com/t5/UniFi-Video-Blog/Repository-is-back/ba-p/1934793
+deb [arch=amd64] http://www.ubnt.com/downloads/unifi-video/apt-3.x jessie ubiquiti
+
+# Jessie Backports for OpenJDK Headless.
+deb http://deb.debian.org/debian/ jessie-backports main
